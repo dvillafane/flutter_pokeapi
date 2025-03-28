@@ -14,6 +14,8 @@ dependencies {
 
 
   // TODO: Add the dependencies for Firebase products you want to use
+  // Dependencia para mostrar mensajes dentro de la aplicación (In-App Messaging) con Firebase
+  implementation("com.google.firebase:firebase-inappmessaging-display")
   // When using the BoM, don't specify versions in Firebase dependencies
   implementation("com.google.firebase:firebase-analytics")
 
