@@ -25,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _pokemonFuture = _apiService.fetchPokemon('pikachu');
   }
 
-// funcióon que actualiza la búsqueda de un Pokemon segun el texto ingresado
+  // funcióon que actualiza la búsqueda de un Pokemon segun el texto ingresado
   void _searchPokemon(String query) {
     setState(() {
       _pokemonFuture = _apiService.fetchPokemon(query.toLowerCase());
@@ -89,38 +89,41 @@ class _MyHomePageState extends State<MyHomePage> {
   void showSearchDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        // título del dialogo
-        title: const Text('Buscar Pokémon'),
-        // contenido del dialogo campo de texto para ingresar el nombre o ID
-        content: TextField(
-          controller: _searchController,
-          autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Nombre o ID',
-            border: OutlineInputBorder(),
+      builder:
+          (context) => AlertDialog(
+            // título del dialogo
+            title: const Text('Buscar Pokémon'),
+            // contenido del dialogo campo de texto para ingresar el nombre o ID
+            content: TextField(
+              controller: _searchController,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: 'Nombre o ID',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            actions: [
+              // botón para cancelar la búsqueda y cerrar el diálogo
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
+              ),
+              // boton para iniciar la búsqueda
+              ElevatedButton(
+                onPressed: () {
+                  if (_searchController.text.isNotEmpty) {
+                    // Se llama a la función que realiza la busqueda
+                    _searchPokemon(_searchController.text);
+                    Navigator.pop(context);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue[800],
+                ),
+                child: const Text('Buscar'),
+              ),
+            ],
           ),
-        ),
-        actions: [
-          // botón para cancelar la búsqueda y cerrar el diálogo
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          // boton para iniciar la búsqueda
-          ElevatedButton(
-            onPressed: () {
-              if (_searchController.text.isNotEmpty) {
-                // Se llama a la función que realiza la busqueda
-                _searchPokemon(_searchController.text);
-                Navigator.pop(context);
-              }
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[800]),
-            child: const Text('Buscar'),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -175,25 +178,25 @@ class PokemonDetails extends StatelessWidget {
                 // muestra el ID del Pokemon con formato
                 Text(
                   '#${pokemon.id.toString().padLeft(3, '0')}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 20, color: Colors.grey),
                 ),
                 const SizedBox(height: 20),
                 // muestra los tipos del Pokemon en forma de chips
                 Wrap(
                   spacing: 10,
-                  children: pokemon.types
-                      .map((type) => Chip(
-                            label: Text(
-                              type.capitalize(),
-                              style: const TextStyle(color: Colors.white),
+                  children:
+                      pokemon.types
+                          .map(
+                            (type) => Chip(
+                              label: Text(
+                                type.capitalize(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              // se asigna un color según el tipo del Pokemon
+                              backgroundColor: _getTypeColor(type),
                             ),
-                            // se asigna un color según el tipo del Pokemon
-                            backgroundColor: _getTypeColor(type),
-                          ))
-                      .toList(),
+                          )
+                          .toList(),
                 ),
               ],
             ),

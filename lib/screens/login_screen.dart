@@ -125,20 +125,13 @@ class _LoginState extends State<LoginPage> {
                 child: Column(
                   children: [
                     // campo de entrada para el correo electronico
-                    _EmailInput(
-                      onSaved: (value) => _email = value!,
-                    ),
+                    _EmailInput(onSaved: (value) => _email = value!),
                     const SizedBox(height: 20),
                     // campo de entrada para la contraseña
-                    _PasswordInput(
-                      onSaved: (value) => _password = value!,
-                    ),
+                    _PasswordInput(onSaved: (value) => _password = value!),
                     const SizedBox(height: 20),
                     if (_error.isNotEmpty)
-                      Text(
-                        _error,
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                      Text(_error, style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 20),
                     // boton para iniciar sesion con indicador de carga si es necesario
                     _LoginButton(
@@ -157,9 +150,7 @@ class _LoginState extends State<LoginPage> {
                     MaterialPageRoute(builder: (_) => ForgotPasswordScreen()),
                   );
                 },
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black54,
-                ),
+                style: TextButton.styleFrom(foregroundColor: Colors.black54),
                 child: const Text('¿Has olvidado la contrasena?'),
               ),
               const SizedBox(height: 40),
@@ -175,18 +166,20 @@ class _LoginState extends State<LoginPage> {
               const SizedBox(height: 20),
               // boton de inicio de sesión con google
               SignInButton(
-                  buttonType: ButtonType.google,
-                  onPressed: () async {
-                    // realiza la autenticación con google
-                    await _signInWithGoogle();
-                    // si el usuario se autentico correctamente se navega a la pantalla principal
-                    if (FirebaseAuth.instance.currentUser != null) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyHomePage()),
-                          (Route<dynamic> route) => false);
-                    }
-                  })
+                buttonType: ButtonType.google,
+                onPressed: () async {
+                  // realiza la autenticación con google
+                  await _signInWithGoogle();
+                  // si el usuario se autentico correctamente se navega a la pantalla principal
+                  if (FirebaseAuth.instance.currentUser != null) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyHomePage()),
+                      (Route<dynamic> route) => false,
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -253,10 +246,7 @@ class _LoginButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onPressed;
 
-  const _LoginButton({
-    required this.isLoading,
-    required this.onPressed,
-  });
+  const _LoginButton({required this.isLoading, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -272,9 +262,10 @@ class _LoginButton extends StatelessWidget {
         ),
         // deshabilita el boton si se está cargando
         onPressed: isLoading ? null : onPressed,
-        child: isLoading
-            ? const CircularProgressIndicator(color: Colors.white)
-            : const Text('Iniciar sesión'),
+        child:
+            isLoading
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text('Iniciar sesión'),
       ),
     );
   }
