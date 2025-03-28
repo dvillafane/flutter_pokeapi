@@ -1,46 +1,59 @@
-// se importan los paquetes necesarios
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_pokeapi/screens/login_screen.dart';
+// Importaciones necesarias para la aplicación en Flutter
+import 'package:flutter/material.dart';                 // Paquete de Flutter para construir la interfaz de usuario.
+import 'package:firebase_core/firebase_core.dart';      // Paquete para inicializar Firebase en la aplicación.
+import 'firebase_options.dart';                         // Archivo generado automáticamente con la configuración de Firebase.
+import 'package:flutter_pokeapi/screens/login_screen.dart';  // Pantalla de inicio de sesión de la aplicación.
+import 'package:firebase_messaging/firebase_messaging.dart'; // Paquete para manejar notificaciones push con Firebase.
+import 'services/noti_service.dart';                     // Servicio personalizado para manejar notificaciones.
 
-// Función principal de la aplicación.
 void main() async {
-  // asegura que los widgets de Flutter esten inicializados antes de ejecutar codigo asincrono
+  // Asegurarse de que el framework de Flutter esté completamente inicializado
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  // inicia la aplicacion pasando el widget principal
-  runApp(MyApp());
+
+  // Inicializar Firebase con las opciones de la plataforma actual
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Inicializar el servicio de notificaciones
+  await initializeNotifications();
+
+  // Configurar el manejo de mensajes en segundo plano
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  // Iniciar la aplicación con el widget raíz MyApp
+  runApp(const MyApp());
 }
 
-// widget principal de la aplicacion definido como StatefulWidget para poder gestionar estados si es necesario
+// Definición del widget principal de la aplicación
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
   @override
-  State createState() {
-    return _MyAppState();
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-// estado asociado a MyApp
+// Estado asociado al widget principal MyApp
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+    // Obtener el token de Firebase Cloud Messaging (FCM) para recibir notificaciones
+    obtenerTokenFCM();
+
+    // Configurar los escuchadores para manejar las notificaciones entrantes
+    setupNotificationListeners();
   }
 
   @override
   Widget build(BuildContext context) {
-    // se construye el widget MaterialApp que envuelve la configuración general de la aplicacion
+    // Construir la interfaz de usuario de la aplicación
     return MaterialApp(
-      title: "Prototipo Flutter",
+      title: "Prototipo Flutter",    // Título de la aplicación
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: false,
+        primarySwatch: Colors.blue,  // Tema de la aplicación con el color azul
+        useMaterial3: false,         // Deshabilitar el uso de Material 3
       ),
-      home: LoginPage(),
+      home: const LoginPage(),       // Página de inicio que muestra la pantalla de inicio de sesión
     );
   }
 }
