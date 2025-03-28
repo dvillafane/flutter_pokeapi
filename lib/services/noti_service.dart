@@ -1,9 +1,10 @@
 // Importaciones necesarias para el manejo de notificaciones y Firebase
-import 'package:firebase_messaging/firebase_messaging.dart';  // Manejo de notificaciones push con Firebase
-import 'package:flutter/foundation.dart';                      // Utilidades de depuración y constantes
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';  // Notificaciones locales en Android e iOS
-import 'package:firebase_core/firebase_core.dart';              // Inicialización de Firebase
-import '../firebase_options.dart';                              // Archivo de opciones de Firebase autogenerado
+import 'package:firebase_app_installations/firebase_app_installations.dart';
+import 'package:firebase_messaging/firebase_messaging.dart'; // Manejo de notificaciones push con Firebase
+import 'package:flutter/foundation.dart'; // Utilidades de depuración y constantes
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // Notificaciones locales en Android e iOS
+import 'package:firebase_core/firebase_core.dart'; // Inicialización de Firebase
+import '../firebase_options.dart'; // Archivo de opciones de Firebase autogenerado
 
 /// Instancia global para manejar notificaciones locales
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -14,12 +15,11 @@ Future<void> initializeNotifications() async {
   // Configuración específica para Android: usa el ícono de la aplicación como ícono de la notificación
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
-  
+
   // Configuración general de inicialización de notificaciones
-  const InitializationSettings initializationSettings =
-      InitializationSettings(
-        android: initializationSettingsAndroid,
-      );
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
 
   // Inicializa el plugin de notificaciones locales con la configuración proporcionada
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
@@ -37,11 +37,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 
   // Verificar que el mensaje tenga datos antes de mostrar la notificación
-  if (message.data.isNotEmpty) {
-    await _showLocalNotification(message);
-  }
+  //if (message.data.isNotEmpty) {
+  await _showLocalNotification(message);
+  //}
 }
-
 
 /// Muestra una notificación local en cualquier contexto (primer plano, segundo plano o cerrada)
 Future<void> _showLocalNotification(RemoteMessage message) async {
@@ -52,25 +51,28 @@ Future<void> _showLocalNotification(RemoteMessage message) async {
   // Si la notificación y su configuración de Android no son nulas, procede a mostrarla
   if (notification != null && android != null) {
     // Configuración de los detalles de la notificación en Android
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'channel_id',       // ID del canal de notificación
-      'channel_name',     // Nombre del canal
-      channelDescription: 'channel_description',  // Descripción del canal
-      importance: Importance.max,  // Nivel de importancia (máxima prioridad)
-      priority: Priority.high,     // Prioridad alta para mostrar al instante
-    );
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+          'channel_id', // ID del canal de notificación
+          'channel_name', // Nombre del canal
+          channelDescription: 'channel_description', // Descripción del canal
+          importance: Importance.max, // Nivel de importancia (máxima prioridad)
+          priority: Priority.high, // Prioridad alta para mostrar al instante
+        );
 
     // Detalles de la notificación combinando configuraciones de Android
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidDetails);
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+    );
 
     // Muestra la notificación localmente en el dispositivo
     await flutterLocalNotificationsPlugin.show(
-      notification.hashCode,  // ID único de la notificación
-      notification.title,     // Título de la notificación
-      notification.body,      // Cuerpo de la notificación
-      notificationDetails,    // Configuración de la notificación
-      payload: 'Notification Payload',  // Carga útil opcional para acciones posteriores
+      notification.hashCode, // ID único de la notificación
+      notification.title, // Título de la notificación
+      notification.body, // Cuerpo de la notificación
+      notificationDetails, // Configuración de la notificación
+      payload:
+          'Notification Payload', // Carga útil opcional para acciones posteriores
     );
   }
 }
@@ -87,8 +89,17 @@ Future<void> obtenerTokenFCM() async {
   if (kDebugMode) {
     print('Registration Token=$token');
   }
-
   // Opcional: Aquí podrías enviar el token a tu servidor o almacenarlo localmente
+}
+
+/// Obtiene Firebase Installation ID del dispositivo
+Future<void> obtenerFID() async {
+  // Solicita el Firebase Installation ID del dispositivo
+  String fid = await FirebaseInstallations.instance.getId();
+  if (kDebugMode) {
+    print('Firebase Installation ID: $fid');
+  }
+  // Puedes almacenar o enviar el FID según tus necesidades
 }
 
 /// Configura los escuchadores para manejar notificaciones en primer plano
