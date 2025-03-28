@@ -11,7 +11,7 @@ class PokeApiService {
   Future<Pokemon> fetchPokemon(String identifier) async {
     // realiza una petición GET a la URL construida con el identificador
     final response = await http.get(Uri.parse('$_baseUrl/pokemon/$identifier'));
-    
+
     // Si la respuesta es exitosa se parsea el JSON y se crea un objeto Pokemon
     if (response.statusCode == 200) {
       return Pokemon.fromJson(json.decode(response.body));

@@ -24,9 +24,10 @@ class Pokemon {
       // - se convierte el valor de 'types' a una lista
       // - se mapea cada elemento, extrayendo el nombre del tipo de la estructura anidada
       // - se genera una lista de Strings a partir de estos valores
-      types: (json['types'] as List)
-          .map((type) => type['type']['name'] as String)
-          .toList(),
+      types:
+          (json['types'] as List)
+              .map((type) => type['type']['name'] as String)
+              .toList(),
       // se extrae la URL de la imagen oficial del Pokémon desde la ruta anidada en el JSON
       imageUrl: json['sprites']['other']['official-artwork']['front_default'],
     );

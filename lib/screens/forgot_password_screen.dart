@@ -27,14 +27,14 @@ class ForgotPasswordScreen extends StatelessWidget {
       // si se envía correctamente se notifica al usuario con un mensaje
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content:
-                Text("Se ha enviado un enlace de recuperación a tu correo")),
+          content: Text("Se ha enviado un enlace de recuperación a tu correo"),
+        ),
       );
     } catch (e) {
       // si ocurre algún error se muestra el error en un SnackBar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
     }
   }
 
@@ -73,8 +73,9 @@ class ForgotPasswordScreen extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: "Correo electrónico",
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 filled: true,
                 fillColor: Colors.white,
               ),

@@ -111,20 +111,13 @@ class _RegisterState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     // campo de entrada para el correo electronico
-                    _EmailInput(
-                      onSaved: (value) => _email = value!,
-                    ),
+                    _EmailInput(onSaved: (value) => _email = value!),
                     const SizedBox(height: 20),
                     // campo de entrada para la contraseña
-                    _PasswordInput(
-                      onSaved: (value) => _password = value!,
-                    ),
+                    _PasswordInput(onSaved: (value) => _password = value!),
                     const SizedBox(height: 20),
                     if (_error.isNotEmpty)
-                      Text(
-                        _error,
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                      Text(_error, style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 20),
                     _RegisterButton(
                       // boton para ejecutar el registro
@@ -198,10 +191,7 @@ class _RegisterButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onPressed;
 
-  const _RegisterButton({
-    required this.isLoading,
-    required this.onPressed,
-  });
+  const _RegisterButton({required this.isLoading, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -217,9 +207,10 @@ class _RegisterButton extends StatelessWidget {
         ),
         // deshabilita el botón si se está en proceso de carga
         onPressed: isLoading ? null : onPressed,
-        child: isLoading
-            ? const CircularProgressIndicator(color: Colors.white)
-            : const Text('Registrarse'),
+        child:
+            isLoading
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text('Registrarse'),
       ),
     );
   }
